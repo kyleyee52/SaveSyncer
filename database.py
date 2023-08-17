@@ -43,4 +43,4 @@ def get_save_location_from_steam_appid(appid):
 #print(get_pageid_from_steam_appid(1462040))
 #print(get_wiki_text(146683))
 #print(get_save_location_from_wiki_text(get_wiki_text_from_pageId(get_pageid_from_steam_appid(1462040))))
-print(get_save_location_from_steam_appid(632360))
+#print(get_save_location_from_steam_appid(632360))
