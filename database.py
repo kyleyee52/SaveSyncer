@@ -8,10 +8,10 @@ def get_pageid_from_steam_appid(appid):
     except:
         raise Exception('Invalid steam appid given')
 
-# Get PCGamingWiki PageID from gog appid
-def get_pageid_from_gog_appid(appid):
+# Get PCGamingWiki PageID from gog productid
+def get_pageid_from_gog_productid(productid):
     try:
-        return requests.get('https://www.pcgamingwiki.com/w/api.php?action=cargoquery&tables=Infobox_game&fields=Infobox_game._pageID%3DPageID%2CInfobox_game.GOGcom_ID&where=Infobox_game.GOGcom_ID%20HOLDS%20%22{}%22&format=jsonfm'.format(appid)).json()['cargoquery'][0]['title']['PageID']
+        return requests.get('https://www.pcgamingwiki.com/w/api.php?action=cargoquery&tables=Infobox_game&fields=Infobox_game._pageID%3DPageID%2CInfobox_game.GOGcom_ID&where=Infobox_game.GOGcom_ID%20HOLDS%20%22{}%22&format=jsonfm'.format(productid)).json()['cargoquery'][0]['title']['PageID']
     except:
         raise Exception('Invalid gog appid given')
 
@@ -37,6 +37,11 @@ def get_save_location_from_wiki_text(wiki_text):
 
 def get_save_location_from_steam_appid(appid):
     pageid = get_pageid_from_steam_appid(appid)
+    wiki_text = get_wiki_text_from_pageId(pageid)
+    return get_save_location_from_wiki_text(wiki_text)
+
+def get_save_location_from_gog_productid(productid):
+    pageid = get_pageid_from_gog_productid(productid)
     wiki_text = get_wiki_text_from_pageId(pageid)
     return get_save_location_from_wiki_text(wiki_text)
 
