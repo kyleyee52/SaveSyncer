@@ -1,5 +1,13 @@
 import requests
 import re
+import urllib.parse
+
+# Get PCGamingWiki PageID from title
+def get_pageid_from_title(title):
+    try:
+        return requests.get('https://www.pcgamingwiki.com/w/api.php?action=cargoquery&format=json&tables=Infobox_game&fields=Infobox_game._pageName%3DPage%2CInfobox_game._pageID%3DPageID&where=Infobox_game._pageName%3D%22{}%22'.format(urllib.parse.quote(title))).json()['cargoquery'][0]['title']['PageID']
+    except:
+        raise Exception('Invalid title given')
 
 # Get PCGamingWiki PageID from steam appid
 def get_pageid_from_steam_appid(appid):
@@ -34,6 +42,11 @@ def get_save_location_from_wiki_text(wiki_text):
         return saves
     except:
         raise Exception('Invalid wiki_text given')
+    
+def get_save_location_from_title(title):
+    pageid = get_pageid_from_steam_appid(title)
+    wiki_text = get_wiki_text_from_pageId(pageid)
+    return get_save_location_from_wiki_text(wiki_text)
 
 def get_save_location_from_steam_appid(appid):
     pageid = get_pageid_from_steam_appid(appid)
@@ -45,7 +58,9 @@ def get_save_location_from_gog_productid(productid):
     wiki_text = get_wiki_text_from_pageId(pageid)
     return get_save_location_from_wiki_text(wiki_text)
 
-#print(get_pageid_from_steam_appid(1462040))
-#print(get_wiki_text(146683))
-#print(get_save_location_from_wiki_text(get_wiki_text_from_pageId(get_pageid_from_steam_appid(1462040))))
-#print(get_save_location_from_steam_appid(632360))
+def get_game_names():
+    try:
+        return requests.get('https://www.pcgamingwiki.com/w/api.php?action=cargoquery&format=json&tables=Infobox_game&fields=_pageName%3DPage').json()
+    except:
+        raise Exception('Failed to get game names')
+    
